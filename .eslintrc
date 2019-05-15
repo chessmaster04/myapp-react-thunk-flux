@@ -56,7 +56,8 @@
         "no-console": "off",
         "no-use-before-define": "off",
         "no-param-reassign": "off",
-        "import/prefer-default-export": "off"
+        "import/prefer-default-export": "off",
+        "no-return-await": "off"
     },
     "globals": {
         "window": true,
