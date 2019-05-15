@@ -3,7 +3,8 @@
         "airbnb",
         "prettier",
         "plugin:prettier/recommended",
-        "prettier/react"
+        "prettier/react",
+        "plugin:flowtype/recommended"
     ],
     "plugins": [
         "prettier",
@@ -36,7 +37,7 @@
         "react/jsx-one-expression-per-line": "off",
         "camelcase": "off",
         "react/prefer-stateless-function": [
-            2,
+            0,
             {
                 "ignorePureComponents": true
             }
