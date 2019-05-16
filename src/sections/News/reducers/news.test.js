@@ -51,6 +51,12 @@ const deletedNewsItem = {
     title: 'News3',
 };
 
+function wrapStatesForNews(state) {
+    return () => ({
+        news: state,
+    });
+}
+
 describe('News', () => {
     afterEach(() => {
         mockAxios.reset();
@@ -170,7 +176,7 @@ describe('News', () => {
 
             return setNewsItem(newNewsItem)(
                 store.dispatch,
-                store.getState,
+                wrapStatesForNews(store.getState()),
             ).then(() => {
                 expect(store.getActions()).toEqual(expectedActions);
             });
@@ -194,7 +200,7 @@ describe('News', () => {
 
             return updateNewsItem(changedNewsItem)(
                 store.dispatch,
-                store.getState,
+                wrapStatesForNews(store.getState()),
             ).then(() => {
                 expect(store.getActions()).toEqual(expectedActions);
             });
@@ -216,7 +222,7 @@ describe('News', () => {
 
             return delNewsItem(deletedNewsItem.id)(
                 store.dispatch,
-                store.getState,
+                wrapStatesForNews(store.getState()),
             ).then(() => {
                 expect(store.getActions()).toEqual(expectedActions);
             });
