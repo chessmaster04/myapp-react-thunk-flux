@@ -39,7 +39,7 @@ export const getNewsItem = news_id => async dispatch => {
             );
         })
         .catch(error => {
-            // console.log(error);
+            console.log(error);
             console.log('error');
         });
 };
@@ -55,12 +55,12 @@ export const setNewsItem = data => async (dispatch, getState) => {
             // console.log(getState());
             dispatch(
                 onSetNewsItem({
-                    news: getState().news.concat([res.data.newsItem]),
+                    news: getState().news.news.concat([res.data.newsItem]),
                 }),
             );
         })
         .catch(error => {
-            // console.log(error);
+            console.log(error);
             console.log('error');
         });
 };
@@ -78,13 +78,15 @@ export const updateNewsItem = data => async (dispatch, getState) => {
                 onUpdateNewsItem({
                     newsItem: res.data.newsItem,
                     news: getState()
-                        .news.filter(item => item.id !== res.data.newsItem.id)
+                        .news.news.filter(
+                            item => item.id !== res.data.newsItem.id,
+                        )
                         .push(res.data.newsItem),
                 }),
             );
         })
         .catch(error => {
-            // console.log(error);
+            console.log(error);
             console.log('error');
         });
 };
@@ -100,14 +102,14 @@ export const delNewsItem = data_id => async (dispatch, getState) => {
             dispatch(
                 onDelNewsItem({
                     newsItem: res.data.newsItem,
-                    news: getState().news.filter(
+                    news: getState().news.news.filter(
                         item => item.id !== res.data.newsItem.id,
                     ),
                 }),
             );
         })
         .catch(error => {
-            // console.log(error);
+            console.log(error);
             console.log('error');
         });
 };
