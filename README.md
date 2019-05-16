@@ -1,4 +1,19 @@
-##### create app
+#### About 
+
+technologies:
+- React + Redux-thunk + Flow
+- Tests (TDD)
+
+Used visual code extensions:
+- Flow Language Support (ext install flowtype.flow-for-vscode)
+- ES7 React/Redux/GraphQL/React-Native snippets (ext install flowtype.flow-for-vscode)
+- ESLint (ext install dbaeumer.vscode-eslint)
+- Yarn (ext install gamunu.vscode-yarn)
+- Material Icon Theme (ext install pkief.material-icon-theme)
+- Markdown Preview Enhanced (ext install shd101wyy.markdown-preview-enhanced)
+- File Name Search (ext install shawn.file-name-search
+
+#### Createing app
 ```
 > npx create-react-app .
 ```
