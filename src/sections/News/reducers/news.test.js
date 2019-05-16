@@ -10,9 +10,11 @@ import {
     onGetNewsItem,
     getNewsItem,
     onSetNewsItem,
+    onUpdateNewsItem,
     setNewsItem,
-    // onDelNewsItem,
-    // delNewsItem,
+    updateNewsItem,
+    onDelNewsItem,
+    delNewsItem,
 } from './news';
 
 const middlewares = [thunk];
@@ -39,6 +41,16 @@ const newNewsItem = {
     title: 'News4',
 };
 
+const changedNewsItem = {
+    id: 2,
+    title: 'News41',
+};
+
+const deletedNewsItem = {
+    id: 3,
+    title: 'News3',
+};
+
 describe('News', () => {
     afterEach(() => {
         mockAxios.reset();
@@ -62,29 +74,35 @@ describe('News', () => {
             ];
         });
 
-        mockAxios.onPost(`/news`).reply(() => {
-            return [201, { newsItem: newNewsItem }];
+        mockAxios.onPost(`/news`).reply(config => {
+            return [201, { newsItem: JSON.parse(config.data) }];
         });
 
-        mockAxios.onPut(`/news/:id`).reply(config => {
-            console.log(config);
-            const id = 1;
-            const newsItemList = news.filter(item => item.id === id);
+        mockAxios.onPut(/\/news\/\d+/).reply(config => {
+            const id = config.url.split('/')[4] * 1;
+            const newData = JSON.parse(config.data);
+            const existsNewsItem = news.some(item => item.id === id);
+            if (existsNewsItem) {
+                return [
+                    200,
+                    {
+                        newsItem: newData,
+                    },
+                ];
+            }
             return [
-                200,
+                404,
                 {
-                    newsItem:
-                        newsItemList.length === 1 ? newsItemList[0] : null,
+                    newsItem: null,
                 },
             ];
         });
 
-        mockAxios.onDelete(`/news/:id`).reply(config => {
-            console.log(config);
-            const id = 1;
+        mockAxios.onDelete(/\/news\/\d+/).reply(config => {
+            const id = config.url.split('/')[4] * 1;
             const newsItemList = news.filter(item => item.id === id);
             return [
-                200,
+                newsItemList.length === 1 ? 200 : 404,
                 {
                     newsItem:
                         newsItemList.length === 1 ? newsItemList[0] : null,
@@ -150,7 +168,56 @@ describe('News', () => {
 
             const store = mockStore(defaultState);
 
-            return setNewsItem()(store.dispatch, store.getState).then(() => {
+            return setNewsItem(newNewsItem)(
+                store.dispatch,
+                store.getState,
+            ).then(() => {
+                expect(store.getActions()).toEqual(expectedActions);
+            });
+        });
+
+        it('updateNewsItem:', () => {
+            const expectedActions = [
+                onUpdateNewsItem({
+                    newsItem: changedNewsItem,
+                    news: news
+                        .filter(item => item.id !== changedNewsItem.id)
+                        .push(changedNewsItem),
+                }),
+            ];
+            const defaultState = {
+                newsItem: null,
+                news,
+            };
+
+            const store = mockStore(defaultState);
+
+            return updateNewsItem(changedNewsItem)(
+                store.dispatch,
+                store.getState,
+            ).then(() => {
+                expect(store.getActions()).toEqual(expectedActions);
+            });
+        });
+
+        it('delNewsItem:', () => {
+            const expectedActions = [
+                onDelNewsItem({
+                    newsItem: deletedNewsItem,
+                    news: news.filter(item => item.id !== deletedNewsItem.id),
+                }),
+            ];
+            const defaultState = {
+                newsItem: null,
+                news,
+            };
+
+            const store = mockStore(defaultState);
+
+            return delNewsItem(deletedNewsItem.id)(
+                store.dispatch,
+                store.getState,
+            ).then(() => {
                 expect(store.getActions()).toEqual(expectedActions);
             });
         });
