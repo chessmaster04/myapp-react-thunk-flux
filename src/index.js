@@ -9,9 +9,7 @@ import App from './App';
 ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <React.StrictMode>
-                <App />
-            </React.StrictMode>
+            <App />
         </ConnectedRouter>
     </Provider>,
     document.getElementById('root'),
